@@ -1,0 +1,43 @@
+Side,Symbol,Name,Order Price,Order Qty,Order Amount,Status,Filled@Avg Price,Order Time,Order Type,Time-in-Force,Allow Pre-Market,Session,Trigger price,Position Opening,Markets,Currency,Order Source,Fill Qty,Fill Price,Fill Amount,Fill Time,Markets.1,Currency.1,Counterparty,Remarks,Platform Fees,Settlement Fees,Consumption Tax,SEC Fees,Trading Activity Fees,Consolidated Audit Trail Fees,Total
+Buy,NVO,Novo-Nordisk A/S,36.0,10,360.0,Filled,10@36.00,"Mar 3, 2026 10:21:14 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,10.0,36.0,360.0,"Mar 3, 2026 10:29:46 ET",US,USD,,,0.99,0.03,0.09,,,,1.11
+Buy,MSFT,Microsoft,385.0,1,385.0,Filled,1@385.00,"Feb 24, 2026 09:46:53 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,385.0,385.0,"Feb 24, 2026 10:00:00 ET",US,USD,,,0.99,0.0,0.09,,,,1.08
+Buy,MSFT,Microsoft,395.0,1,395.0,Cancelled,0@0.00,"Feb 18, 2026 10:08:18 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,MSFT,Microsoft,405.0,1,405.0,Filled,1@405.00,"Feb 11, 2026 09:36:07 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,405.0,405.0,"Feb 11, 2026 10:13:00 ET",US,USD,,,0.99,0.0,0.09,,,,1.08
+Buy,MSFT,Microsoft,400.0,1,400.0,Filled,1@400.00,"Feb 5, 2026 10:57:19 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,400.0,400.0,"Feb 5, 2026 11:03:59 ET",US,USD,,,0.99,0.0,0.09,,,,1.08
+Buy,MSFT,Microsoft,407.0,1,407.0,Failed,0@0.00,"Feb 3, 2026 21:00:10 ET",Limit,Day,,24 Hour Trading,,,US,USD,,,,,,,,,,,,,,,,
+Buy,META,Meta Platforms,601.85,1,601.85,Filled,1@601.79,"Nov 17, 2025 16:19:03 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,601.79,601.79,"Nov 17, 2025 16:19:03 ET",US,USD,,,0.99,0.0,0.09,,,0.0,1.08
+Buy,META,Meta Platforms,605.0,1,605.0,Cancelled,0@0.00,"Nov 14, 2025 10:55:05 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,META,Meta Platforms,601.0,1,601.0,Cancelled,0@0.00,"Nov 13, 2025 13:39:13 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,CPRT,Copart,40.0,1,40.0,Cancelled,0@0.00,"Nov 10, 2025 12:14:42 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,META,Meta Platforms,675.0,1,675.0,Filled,1@675.00,"Oct 30, 2025 11:58:19 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,675.0,675.0,"Oct 30, 2025 12:10:32 ET",US,USD,,,0.99,0.0,0.09,,,0.0,1.08
+Buy,AMZN,Amazon,209.99,1,209.99,Cancelled,0@0.00,"Oct 16, 2025 13:46:32 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,CPRT,Copart,44.3,2,88.6,Filled,2@44.30,"Oct 13, 2025 11:29:00 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,2.0,44.3,88.6,"Oct 13, 2025 11:52:05 ET",US,USD,,,0.99,0.01,0.09,,,0.0,1.09
+Buy,UNH,UnitedHealth,240.0,1,240.0,Filled,1@240.00,"Aug 4, 2025 05:29:15 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,240.0,240.0,"Aug 4, 2025 07:05:55 ET",US,USD,,,0.99,0.0,0.09,,,0.0,1.08
+Buy,VTI,Vanguard Total Stock Market ETF,299.99,1,299.99,Cancelled,0@0.00,"Aug 4, 2025 04:37:42 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,ASML,ASML Holding,686.0,1,686.0,Filled,1@686.00,"Aug 1, 2025 14:12:00 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,686.0,686.0,"Aug 1, 2025 14:12:13 ET",US,USD,,,0.99,0.0,0.09,,,0.0,1.08
+Buy,CPRT,Copart,49.0,3,147.0,Filled,3@49.00,"Jun 16, 2025 06:32:16 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,3.0,49.0,147.0,"Jun 16, 2025 06:40:59 ET",US,USD,,,0.99,0.01,0.09,,,0.0,1.09
+Buy,VTI,Vanguard Total Stock Market ETF,240.0,1,240.0,Cancelled,0@0.00,"Apr 9, 2025 12:10:00 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,NVDA,NVIDIA,89.99,1,89.99,Cancelled,0@0.00,"Apr 7, 2025 10:41:38 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,GOOG,Alphabet-C,150.0,1,150.0,Filled,1@150.00,"Apr 7, 2025 10:16:11 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,150.0,150.0,"Apr 7, 2025 10:22:09 ET",US,USD,,,0.99,0.0,0.09,,,,1.08
+Buy,NVDA,NVIDIA,100.0,2,200.0,Filled,2@100.00,"Apr 7, 2025 10:15:15 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,2.0,100.0,200.0,"Apr 7, 2025 10:18:10 ET",US,USD,,,0.99,0.01,0.09,,,,1.09
+Buy,VTI,Vanguard Total Stock Market ETF,256.0,1,256.0,Filled,1@256.00,"Apr 7, 2025 10:14:44 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,256.0,256.0,"Apr 7, 2025 10:18:11 ET",US,USD,,,0.99,0.0,0.09,,,,1.08
+Buy,AMZN,Amazon,178.0,1,178.0,Filled,1@178.00,"Apr 3, 2025 12:02:21 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,178.0,178.0,"Apr 3, 2025 15:38:16 ET",US,USD,,,0.99,0.0,0.09,,,,1.08
+Buy,AMZN,Amazon,192.0,1,192.0,Filled,1@192.00,"Mar 19, 2025 11:40:54 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,192.0,192.0,"Mar 19, 2025 13:14:02 ET",US,USD,,,0.99,0.0,0.09,,,,1.08
+Buy,AMZN,Amazon,190.0,1,190.0,Cancelled,0@0.00,"Mar 18, 2025 12:18:43 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,VTI,Vanguard Total Stock Market ETF,273.0,1,273.0,Filled,1@273.00,"Mar 11, 2025 11:47:31 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,273.0,273.0,"Mar 11, 2025 12:14:38 ET",US,USD,,,0.99,0.0,0.09,,,,1.08
+Buy,VTI,Vanguard Total Stock Market ETF,273.0,1,273.0,Cancelled,0@0.00,"Mar 10, 2025 11:27:08 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,VTI,Vanguard Total Stock Market ETF,270.0,1,270.0,Failed,0@0.00,"Mar 10, 2025 11:25:38 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,VTI,Vanguard Total Stock Market ETF,270.0,1,270.0,Failed,0@0.00,"Mar 10, 2025 11:24:14 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,VTI,Vanguard Total Stock Market ETF,270.0,1,270.0,Failed,0@0.00,"Mar 10, 2025 11:23:53 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,GOOG,Alphabet-C,160.0,1,160.0,Cancelled,0@0.00,"Mar 10, 2025 11:23:03 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,NVDA,NVIDIA,107.5,1,107.5,Filled,1@107.50,"Mar 10, 2025 11:04:37 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,107.5,107.5,"Mar 10, 2025 12:48:48 ET",US,USD,,,0.99,0.0,0.09,,,,1.08
+Buy,NVDA,NVIDIA,121.0,1,121.0,Filled,1@121.00,"Feb 28, 2025 10:07:27 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,1.0,121.0,121.0,"Feb 28, 2025 12:44:21 ET",US,USD,,,0.99,0.0,0.09,,,,1.08
+Buy,GOOG,Alphabet-C,170.0,2,340.0,Filled,2@170.00,"Feb 28, 2025 10:04:45 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,2.0,170.0,340.0,"Feb 28, 2025 11:25:10 ET",US,USD,,,0.99,0.01,0.09,,,,1.09
+Buy,NKE,Nike,68.8,2,137.6,Cancelled,0@0.00,"Feb 9, 2025 11:09:10 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,GOOG,Alphabet-C,149.0,1,149.0,Cancelled,0@0.00,"Sep 10, 2024 09:42:37 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,GOOG,Alphabet-C,159.8,2,319.6,Filled,2@159.80,"Aug 6, 2024 11:57:08 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,2.0,159.8,319.6,"Aug 6, 2024 16:50:06 ET",US,USD,,,0.99,0.01,0.09,,,,1.09
+Buy,NKE,Nike,88.8,2,177.6,Filled,2@88.80,"Apr 6, 2024 23:32:01 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,2.0,88.8,177.6,"Apr 8, 2024 09:30:32 ET",US,USD,,,0.99,0.01,0.09,,,,1.09
+Buy,NKE,Nike,92.3,2,184.6,Cancelled,0@0.00,"Mar 22, 2024 11:23:56 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Buy,HSY,Hershey,188.5,1,188.5,Cancelled,0@0.00,"Jan 8, 2024 10:01:00 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,,,,,,,,,,,,,,,
+Sell,DIS,Disney,90.15,2,180.3,Filled,2@90.50,"Dec 31, 2023 04:45:30 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,2.0,90.5,181.0,"Jan 2, 2024 04:06:33 ET",US,USD,,,0.99,0.01,0.09,0.01,0.01,,1.11
+Buy,DIS,Disney,92.9,2,185.8,Filled,2@92.90,"Dec 7, 2023 10:21:23 ET",Limit,Day,,RTH + Pre/Post-Mkt,,,US,USD,,2.0,92.9,185.8,"Dec 7, 2023 11:17:09 ET",US,USD,,,0.99,0.01,0.08,,,,1.08
