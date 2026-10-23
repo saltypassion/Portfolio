@@ -85,6 +85,24 @@ def get_price_history(ticker: str, period: str = "1y") -> pd.DataFrame:
     return yf.Ticker(ticker).history(period=period)
 
 
+@st.cache_data(ttl=3600)  # cache for 1 hour
+def get_fx_rate(pair: str = "USDSGD=X") -> float | None:
+    """Fetch a single FX close for display-only currency conversion."""
+    try:
+        history = yf.Ticker(pair).history(period="5d")
+    except Exception:
+        return None
+
+    if history is None or history.empty or "Close" not in history.columns:
+        return None
+
+    close = history["Close"].dropna()
+    if close.empty:
+        return None
+
+    return float(close.iloc[-1])
+
+
 @st.cache_data(ttl=21600)  # cache for 6 hours
 def get_ticker_profiles(tickers: tuple[str, ...]) -> pd.DataFrame:
     """Fetch company/fund metadata for a list of tickers.
@@ -133,3 +151,17 @@ def get_ticker_profiles(tickers: tuple[str, ...]) -> pd.DataFrame:
         })
 
     return pd.DataFrame(rows)
+
+
+@st.cache_data(ttl=120)
+def get_option_prices(symbols: tuple[str, ...]) -> dict[str, float]:
+    """Last traded price per option contract, keyed by Yahoo contract symbol (missing if no quote)."""
+    prices = {}
+    for symbol in symbols:
+        try:
+            history = yf.Ticker(symbol).history(period="5d")
+        except Exception:
+            continue
+        if not history.empty:
+            prices[symbol] = float(history["Close"].iloc[-1])
+    return prices

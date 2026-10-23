@@ -38,6 +38,133 @@ def calculate_metrics(portfolio):
                                       "Current Price", "Equity", "Unrealised P/L", "Unrealised %"])
     return pd.DataFrame(rows).sort_values("Equity", ascending=False)
 
+
+def calculate_year_end_holdings(transactions: pd.DataFrame) -> pd.DataFrame:
+    """Build year-end holdings snapshots using FIFO cost basis and year-end prices."""
+    if transactions.empty:
+        return pd.DataFrame(
+            columns=[
+                "Year",
+                "Market Value",
+                "Cost Basis",
+                "Unrealised P/L",
+            ]
+        )
+
+    tx = transactions.copy()
+    tx["Date"] = pd.to_datetime(tx["Date"])
+    trade_tx = tx[tx["Type"].isin(["Buy", "Sell"])].copy().sort_values("Date")
+
+    if trade_tx.empty:
+        return pd.DataFrame(
+            columns=[
+                "Year",
+                "Market Value",
+                "Cost Basis",
+                "Unrealised P/L",
+            ]
+        )
+
+    portfolio = {}
+    snapshots = []
+
+    for year, year_df in trade_tx.groupby(trade_tx["Date"].dt.year, sort=True):
+        for _, row in year_df.iterrows():
+            ticker = str(row["Ticker"]).strip().upper()
+            txn_type = str(row["Type"]).strip().title()
+            units = float(row["Units"])
+
+            if ticker not in portfolio:
+                portfolio[ticker] = []
+
+            if txn_type == "Buy":
+                portfolio[ticker].append(
+                    {
+                        "units": units,
+                        "cost_per_unit": row["TotalCost"] / units if units else 0.0,
+                    }
+                )
+                continue
+
+            units_to_sell = units
+            while units_to_sell > 0 and portfolio[ticker]:
+                lot = portfolio[ticker][0]
+                used = min(lot["units"], units_to_sell)
+                lot["units"] -= used
+                units_to_sell -= used
+
+                if lot["units"] == 0:
+                    portfolio[ticker].pop(0)
+
+        year_cost_basis = 0.0
+        year_positions = {}
+        for ticker, lots in portfolio.items():
+            remaining_shares = sum(lot["units"] for lot in lots)
+            if remaining_shares <= 0:
+                continue
+
+            year_positions[ticker] = remaining_shares
+            year_cost_basis += sum(lot["units"] * lot["cost_per_unit"] for lot in lots)
+
+        snapshots.append(
+            {
+                "Year": year,
+                "Cost Basis": year_cost_basis,
+                "Positions": year_positions,
+            }
+        )
+
+    if not snapshots:
+        return pd.DataFrame(columns=["Year", "Market Value", "Cost Basis", "Unrealised P/L"])
+
+    tickers = sorted({ticker for snap in snapshots for ticker in snap["Positions"].keys()})
+    if not tickers:
+        return pd.DataFrame(columns=["Year", "Market Value", "Cost Basis", "Unrealised P/L"])
+
+    start = f"{snapshots[0]['Year']}-01-01"
+    end = f"{snapshots[-1]['Year'] + 1}-01-10"
+    prices = yf.download(tickers, start=start, end=end, progress=False)
+
+    if len(tickers) == 1:
+        close = prices["Close"].to_frame(name=tickers[0])
+    elif isinstance(prices.columns, pd.MultiIndex):
+        close = prices["Close"]
+    else:
+        close = prices[["Close"]]
+        close.columns = tickers[:1]
+
+    close.index = pd.to_datetime(close.index).normalize()
+    daily_close = close.resample("D").ffill()
+
+    rows = []
+    for snapshot in snapshots:
+        year_end = pd.Timestamp(f"{snapshot['Year']}-12-31")
+        market_value = 0.0
+
+        for ticker, shares in snapshot["Positions"].items():
+            if ticker not in daily_close.columns:
+                continue
+            series = daily_close[ticker].dropna()
+            if series.empty:
+                continue
+
+            available = series[series.index <= year_end]
+            if available.empty:
+                continue
+
+            market_value += shares * float(available.iloc[-1])
+
+        rows.append(
+            {
+                "Year": snapshot["Year"],
+                "Market Value": market_value,
+                "Cost Basis": snapshot["Cost Basis"],
+                "Unrealised P/L": market_value - snapshot["Cost Basis"],
+            }
+        )
+
+    return pd.DataFrame(rows).sort_values("Year")
+
 def lot_breakdown(portfolio):
     """Flatten the FIFO portfolio structure into one row per remaining buy lot."""
     rows = []

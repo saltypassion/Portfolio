@@ -1,0 +1,14 @@
+# Personal portfolio data (trades, dividends, moomoo cash flows). Never commit.
+data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS / editor clutter
+.DS_Store
+.Rhistory
+
+# Rebuilt from the demo source files on every load
+demo_data/transactions.csv

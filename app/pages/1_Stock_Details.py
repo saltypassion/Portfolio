@@ -1,9 +1,12 @@
 """Single-ticker analysis page for both held positions and watchlist names."""
 
+import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
 
-from src.io import load_transactions, load_watchlist
+from src.importers.moomoo import load_sync_state
+from src.io import load_options, load_source_transactions, load_transactions, load_watchlist
+from src.options import priced_option_trades
 from src.pricing import get_price_history, get_ticker_profiles
 from src.metrics import build_average_cost_curve
 from src.ui import apply_app_chrome, format_compact_quantity, render_data_table, render_page_header
@@ -16,7 +19,12 @@ apply_app_chrome("Stock Details")
 
 df = load_transactions()
 watchlist_df = load_watchlist()
-tickers = sorted(set(df["Ticker"].unique()).union(set(watchlist_df["Ticker"].unique())))
+option_fills = load_options()
+tickers = sorted(
+    set(df["Ticker"].unique())
+    .union(set(watchlist_df["Ticker"].unique()))
+    .union(set(option_fills["Underlying"].unique()))
+)
 
 if not tickers:
     st.info("No portfolio or watchlist tickers available yet.")
@@ -33,7 +41,7 @@ ticker = st.selectbox(
 
 render_page_header(
     f"{ticker} Stock Details",
-    "Inspect price action, average cost, realised gains, and dividend receipts for a single holding.",
+    "Inspect price action, average cost, realised gains, dividend receipts and option income for a single holding.",
     kicker="Analysis",
 )
 
@@ -363,3 +371,49 @@ if not dividend_tx.empty:
 
 else:
     st.write("No dividend transactions recorded for this stock.")
+
+# -------------------------
+# Option income
+# -------------------------
+
+st.subheader("Options")
+
+stock_option_fills = option_fills[option_fills["Underlying"] == ticker]
+
+if not stock_option_fills.empty:
+    option_trades = priced_option_trades(
+        stock_option_fills,
+        load_source_transactions("Trades"),
+        load_sync_state().get("option_marks", {}),
+    )
+    closed_options = option_trades[option_trades["Outcome"] != "Open"]
+    open_options = option_trades[option_trades["Outcome"] == "Open"]
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Options Income (realised)", f"${closed_options['P/L'].sum():,.2f}")
+    col2.metric(
+        "Open Options P/L",
+        f"${open_options['P/L'].sum():,.2f}" if open_options["P/L"].notna().all() else "No quote",
+    )
+    col3.metric("Option Trades", f"{len(closed_options)} closed · {len(open_options)} open")
+
+    render_data_table(
+        pd.DataFrame({
+            "Contract": option_trades["Contract"],
+            "Strategy": option_trades["Strategy"],
+            "Strike": option_trades["Strike"],
+            "Expiry": option_trades["Expiry"],
+            "Contracts": option_trades["Contracts"],
+            "Opened": option_trades["Opened"].dt.normalize(),
+            "Closed": pd.to_datetime(option_trades["Closed"]).dt.normalize(),
+            "Premium": option_trades["Opening Value"],
+            "Fees": option_trades["Fees"],
+            "P/L": option_trades["P/L"],
+            "Outcome": option_trades["Outcome"],
+        }).sort_values("Opened", ascending=False),
+        hide_index=True,
+    )
+    st.caption("P/L is after fees, with each contract covering 100 shares. Open positions are valued at the latest price.")
+
+else:
+    st.write("No option trades recorded for this stock.")

@@ -15,13 +15,13 @@ from src.config import (
     DATA_DIR,
     DATA_PATH,
     DIVIDEND_PATH,
-    RAW_UPLOAD_DIR,
+    OPTION_COLUMNS,
+    OPTIONS_PATH,
     TRADE_PATH,
     TRANSACTION_COLUMNS,
     WATCHLIST_COLUMNS,
     WATCHLIST_PATH,
 )
-from src.importers.moomoo import deduplicate_transactions, transform_moomoo_to_app_schema
 
 
 def _empty_transactions_df() -> pd.DataFrame:
@@ -147,7 +147,6 @@ def rebuild_transactions_master() -> pd.DataFrame:
 def ensure_data_files() -> None:
     """Create required folders/files and run one-time migration if needed."""
     Path(DATA_DIR).mkdir(parents=True, exist_ok=True)
-    Path(RAW_UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
     migrate_legacy_transactions()
 
     for path in [TRADE_PATH, DIVIDEND_PATH]:
@@ -161,71 +160,34 @@ def ensure_data_files() -> None:
         rebuild_transactions_master()
 
 
-def save_uploaded_raw_file(raw_df: pd.DataFrame, file_name_stem: str) -> Path:
-    ensure_data_files()
-    safe_name = Path(file_name_stem).stem.strip()
-    if not safe_name:
-        raise ValueError("Please enter a valid file name.")
-
-    raw_path = Path(RAW_UPLOAD_DIR) / f"{safe_name}.csv"
-    raw_df.to_csv(raw_path, index=False)
-    return raw_path
-
-
-def import_moomoo_transactions(raw_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, int]:
-    """Transform a broker export, deduplicate it against imported trades, and persist it."""
-    ensure_data_files()
-    cleaned_df = _normalize_transactions(transform_moomoo_to_app_schema(raw_df))
-    existing_trades = _read_transactions_csv(TRADE_PATH)
-    net_new_df = deduplicate_transactions(cleaned_df, existing_trades)
-    updated_trades = pd.concat([existing_trades, net_new_df], ignore_index=True)
-    _write_transactions_csv(updated_trades, TRADE_PATH)
-    rebuild_transactions_master()
-    return cleaned_df, net_new_df, len(existing_trades)
-
-
-def append_dividend_transaction(
-    *,
-    date,
-    ticker: str,
-    shares: float,
-    dividend_per_share: float,
-    fee: float,
-    currency: str,
+def replace_source_transactions(
+    trades: pd.DataFrame,
+    dividends: pd.DataFrame,
+    options: pd.DataFrame,
 ) -> pd.DataFrame:
-    """Append one manual dividend row and then rebuild the combined transaction file."""
+    """Overwrite the trade, dividend and option sources with a full broker sync, then rebuild the master file."""
     ensure_data_files()
-    dividend_row = pd.DataFrame([
-        {
-            "Date": pd.to_datetime(date),
-            "Ticker": ticker,
-            "Type": "Dividend",
-            "Units": shares,
-            "Price": dividend_per_share,
-            "Fee": fee,
-            "Currency": currency,
-        }
-    ])
-    existing_dividends = _read_transactions_csv(DIVIDEND_PATH)
-    updated_dividends = pd.concat([existing_dividends, dividend_row], ignore_index=True)
-    _write_transactions_csv(updated_dividends, DIVIDEND_PATH)
+    _write_transactions_csv(trades, TRADE_PATH)
+    _write_transactions_csv(dividends, DIVIDEND_PATH)
+    _write_options_csv(options)
     return rebuild_transactions_master()
 
 
-def delete_last_transaction(source: str) -> bool:
-    ensure_data_files()
-    source_map = {
-        "Trades": TRADE_PATH,
-        "Dividends": DIVIDEND_PATH,
-    }
-    path = source_map[source]
-    df = _read_transactions_csv(path)
-    if df.empty:
-        return False
+def _write_options_csv(df: pd.DataFrame, path: str = OPTIONS_PATH) -> None:
+    output = df.reindex(columns=OPTION_COLUMNS).sort_values("Date")
+    output.to_csv(path, index=False, date_format="%Y-%m-%d %H:%M:%S")
 
-    _write_transactions_csv(df.iloc[:-1], path)
-    rebuild_transactions_master()
-    return True
+
+def load_options(path: str = OPTIONS_PATH) -> pd.DataFrame:
+    """Load option fills (kept apart from stock trades, which they would distort)."""
+    ensure_data_files()
+    if not Path(path).exists():
+        return pd.DataFrame(columns=OPTION_COLUMNS)
+
+    options = pd.read_csv(path, parse_dates=["Date", "Expiry"])
+    for column in ["Strike", "Contracts", "Price", "Fee"]:
+        options[column] = pd.to_numeric(options[column], errors="coerce").fillna(0.0)
+    return options.sort_values("Date").reset_index(drop=True)
 
 
 def load_source_transactions(source: str) -> pd.DataFrame:

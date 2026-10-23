@@ -3,6 +3,8 @@
 import pandas as pd
 import streamlit as st
 
+from src.config import DEMO_MODE
+
 
 def format_compact_quantity(value, max_decimals: int = 4) -> str:
     """Display quantities without forced trailing zeros."""
@@ -32,6 +34,8 @@ def parse_optional_float(raw_value: str, decimals: int = 2) -> float | None:
 def apply_app_chrome(page_title: str) -> None:
     """Apply the shared layout, theme, and widget styling to each page."""
     st.set_page_config(page_title=page_title, layout="wide")
+    if DEMO_MODE:
+        st.info("Demo mode: you're viewing sample data, not a real portfolio. See the README to connect your own moomoo account.")
     st.markdown(
         """
         <style>
